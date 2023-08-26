@@ -1,14 +1,24 @@
 // DOM elements
 const image = document.getElementById("image");
+const clickCountElement = document.getElementById("clickCount");
 
 // Sound file
-const audioSrc = "nigga.mp3"; // Replace with actual path to your audio file
+const audioSrc = "nigga.mp3";
+
+// Click count variable
+let clickCount = 0;
 
 // Event listener for image click
-image.addEventListener("click", playSound);
+image.addEventListener("click", handleImageClick);
 
 // Function to play sound and shrink image
-function playSound() {
+function handleImageClick() {
+  // Increase click count
+  clickCount++;
+  
+  // Update click count display
+  clickCountElement.textContent = `Nigga Counter: ${clickCount}`;
+  
   // Shrink image
   image.classList.add("shrink");
   

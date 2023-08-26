@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Image Click Sound</title>
+  <title>Nigga Trump</title>
   <style>
     body {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
@@ -14,15 +15,49 @@
     .image {
       cursor: pointer;
       transition: transform 0.3s;
+      max-width: 100%;
     }
     
     .shrink {
       transform: scale(0.9);
     }
+    
+    #clickCount {
+      font-size: 20px;
+      margin-top: 10px;
+    }
+    
+    /* Media Queries */
+    
+    /* For screens with a width less than or equal to 768px */
+    @media (max-width: 768px) {
+      .image {
+        width: 80%;
+      }
+      
+      #clickCount {
+        font-size: 16px;
+        margin-top: 8px;
+      }
+    }
+    
+    /* For screens with a width greater than 768px */
+    @media (min-width: 769px) {
+      .image {
+        width: 400px;
+        height: auto;
+      }
+      
+      #clickCount {
+        font-size: 20px;
+        margin-top: 10px;
+      }
+    }
   </style>
 </head>
 <body>
-  <img class="image" id="image" src="nigga.jpg" width="400" height="auto">
+  <img class="image" id="image" src="nigga.jpg">
+  <span id="clickCount">Nigga Clicks: 0</span>
   
   <script src="script.js"></script>
 </body>

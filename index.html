@@ -1,69 +1,79 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, height=device-height">
-<meta http-equiv='cache-control' content='no-cache'> 
-<meta http-equiv='expires' content='0'> 
-<meta http-equiv='pragma' content='no-cache'>
+<script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
   <title>Nigga Trump</title>
+  <link rel="icon" type="image/x-icon" href="/images/nigga.ico">
   <style>
     body {
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       height: 100vh;
       margin: 0;
-      padding: 20px;
-      box-sizing: border-box;
     }
-
-    .image-wrapper {
-      width: 50%;
-      max-width: 1000px;
-    }
-
-    .image {
-      display: block;
-      width: 100%;
+    
+    #imageContainer {
+      position: relative;
+	  touch-action: manipulation;
+      width: 400px;
       height: auto;
+    }
+    
+    .image {
       cursor: pointer;
       transition: transform 0.3s;
-      object-fit: contain;
-      margin-top: 20px;
+      max-width: 100%;
     }
-
+    
     .shrink {
       transform: scale(0.9);
     }
-
+    
     #clickCount {
-      font-size: 20px;
-      margin-top: 20px;
+      font-family: Impact, sans-serif;
+      font-size: 80px;
+      margin-top: 1px;
+      color: white;
+      text-shadow: -4px -4px 0 black, 4px -4px 0 black, -4px 4px 0 black, 4px 4px 0 black;
     }
-
+    
+    /* Media Queries */
+    
+    /* For screens with a width less than or equal to 768px */
     @media (max-width: 768px) {
-      .image-wrapper {
-        padding: 10px;
+      #imageContainer {
+        width: 80%;
       }
-
-      .image {
-        margin-top: 10px;
-      }
-
+      
       #clickCount {
-        font-size: 16px;
-        margin-top: 10px;
+        font-size: 20px;
+        margin-top: 8px;
+      }
+    }
+    
+    /* For screens with a width greater than 768px */
+    @media (min-width: 769px) {
+      #imageContainer {
+        width: 600px;
+      }
+      
+      #clickCount {
+        font-size: 80px;
+        margin-top: 1px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="image-wrapper">
+  <div id="imageContainer">
     <img class="image" id="image" src="nigga.jpg">
   </div>
   <span id="clickCount">Nigga Counter: 0</span>
-
+  
   <script src="script.js"></script>
 </body>
 </html>

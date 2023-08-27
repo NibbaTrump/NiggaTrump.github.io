@@ -23,7 +23,6 @@ const image = document.getElementById("image");
 const clickCountElement = document.getElementById("clickCount");
 
 // Sound file
-const context = new (window.AudioContext || window.webkitAudioContext)();
 const audioFile = 'nigga.mp3';
 
 // Click count variable

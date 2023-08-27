@@ -23,9 +23,9 @@ const image = document.getElementById("image");
 const clickCountElement = document.getElementById("clickCount");
 
 // Sound file
-const audioSrc = "nigga.mp3";
-// Create audio object
-const audio = new Audio(audioSrc);
+const context = new (window.AudioContext || window.webkitAudioContext)();
+const audioFile = 'nigga.mp3';
+
 // Click count variable
 let clickCount = 0;
 
@@ -58,9 +58,18 @@ function handleImageClick() {
 
         // Update click count display
         clickCountElement.textContent = `Nigga Count: ${newCount}`;
-	
+		
+		// Create audio object
+  
   // Play audio on click
-  audio.play();
+  const source = context.createBufferSource();
+  getSource(audioFile, function(buffer) {
+    source.buffer = buffer;
+    source.connect(context.destination);
+    source.start(0);
+  });
+  
+    request.send();
 
         // Shrink image
         shrinkImage();
@@ -78,6 +87,18 @@ function handleImageClick() {
       });
   
 }
+function getSource(url, callback) {
+  const request = new XMLHttpRequest();
+  request.open('GET', url, true);
+  request.responseType = 'arraybuffer';
+
+  request.onload = function() {
+    context.decodeAudioData(request.response, callback);
+  };
+
+  request.send();
+}
+
 
 // Listen for changes to global click count in Firebase
 db.ref("clicks").on("value", (snapshot) => {

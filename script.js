@@ -25,6 +25,35 @@ const clickCountElement = document.getElementById("clickCount");
 // Sound file
 const audioFile = 'nigga.mp3';
 
+class WebAudioPlayer {
+  constructor() {
+    this.context = new (window.AudioContext || window.webkitAudioContext)();
+  }
+
+  playAudio(url) {
+    const source = this.context.createBufferSource();
+    this.getSource(url, (buffer) => {
+      source.buffer = buffer;
+      source.connect(this.context.destination);
+      source.start(0);
+    });
+  }
+
+  getSource(url, callback) {
+    const request = new XMLHttpRequest();
+    request.open('GET', url, true);
+    request.responseType = 'arraybuffer';
+
+    request.onload = () => {
+      this.context.decodeAudioData(request.response, callback);
+    };
+
+    request.send();
+  }
+}
+
+const player = new WebAudioPlayer();
+
 // Click count variable
 let clickCount = 0;
 
@@ -59,22 +88,8 @@ function handleImageClick() {
         clickCountElement.textContent = `Nigga Count: ${newCount}`;
 		
 		// Create audio object
-  
-  // Play audio on click
-   if (!executed) {
-    // Create the AudioContext only if it doesn't exist
-    context = new (window.AudioContext || window.webkitAudioContext)();
-	executed = true;
-  }
-  const source = context.createBufferSource();
-  getSource(audioFile, function(buffer) {
-    source.buffer = buffer;
-    source.connect(context.destination);
-    source.start(0);
-  });
-  
-    request.send();
-
+		player.playAudio(audioFile);
+ 
         // Shrink image
         shrinkImage();
 

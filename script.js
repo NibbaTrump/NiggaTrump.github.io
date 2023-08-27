@@ -24,7 +24,8 @@ const clickCountElement = document.getElementById("clickCount");
 
 // Sound file
 const audioSrc = "nigga.mp3";
-
+// Create audio object
+const audio = new Audio(audioSrc);
 // Click count variable
 let clickCount = 0;
 
@@ -57,10 +58,7 @@ function handleImageClick() {
 
         // Update click count display
         clickCountElement.textContent = `Nigga Count: ${newCount}`;
-		
-		// Create audio object
-  const audio = new Audio(audioSrc);
-
+	
   // Play audio on click
   audio.play();
 

@@ -2,7 +2,7 @@
  document.addEventListener('dblclick', function(event) {
     event.preventDefault();
 }, { passive: false });
-
+var executed = false;
  // Your web app's Firebase configuration
   const firebaseConfig = {
     apiKey: "AIzaSyB9JDvvT1ZOuw1Dsrp2JUtXhktdLZux8jA",
@@ -23,6 +23,7 @@ const image = document.getElementById("image");
 const clickCountElement = document.getElementById("clickCount");
 
 // Sound file
+const context = new (window.AudioContext || window.webkitAudioContext)();
 const audioFile = 'nigga.mp3';
 
 // Click count variable
@@ -45,10 +46,7 @@ function shrinkImage() {
 // Function to handle image click
 function handleImageClick() {
   // Check if user is authenticated
- if (!context) {
-    // Create the AudioContext only if it doesn't exist
-    context = new (window.AudioContext || window.webkitAudioContext)();
-  }
+ 
     // Load current click count value
     db.ref("clicks")
       .once("value")
@@ -63,13 +61,12 @@ function handleImageClick() {
 		
 		// Create audio object
   
- 
-
-        // Shrink image
-        shrinkImage();
-		
-		 // Play audio on click
-   
+  // Play audio on click
+   if (!executed) {
+    // Create the AudioContext only if it doesn't exist
+    context = new (window.AudioContext || window.webkitAudioContext)();
+	executed = true;
+  }
   const source = context.createBufferSource();
   getSource(audioFile, function(buffer) {
     source.buffer = buffer;
@@ -78,6 +75,9 @@ function handleImageClick() {
   });
   
     request.send();
+
+        // Shrink image
+        shrinkImage();
 
         // Update global click count in Firebase
         db.ref("clicks").transaction((currentValue) => {

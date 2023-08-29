@@ -3,6 +3,7 @@
     event.preventDefault();
 }, { passive: false });
 var executed = false;
+var special = false;
  // Your web app's Firebase configuration
   const firebaseConfig = {
     apiKey: "AIzaSyB9JDvvT1ZOuw1Dsrp2JUtXhktdLZux8jA",
@@ -22,6 +23,8 @@ const db = firebase.database();
 const image = document.getElementById("image");
 const clickCountElement = document.getElementById("clickCount");
 
+// Sound file
+var audioFile = 'nigga.mp3';
 
 class WebAudioPlayer {
   constructor() {
@@ -29,21 +32,28 @@ class WebAudioPlayer {
   }
 
   playAudio(url) {
-    fetch(url)
-      .then(response => response.arrayBuffer())
-      .then(arrayBuffer => this.context.decodeAudioData(arrayBuffer))
-      .then(buffer => {
-        const source = this.context.createBufferSource();
-        source.buffer = buffer;
-        source.connect(this.context.destination);
-        source.start(0);
-      });
+    const source = this.context.createBufferSource();
+    this.getSource(url, (buffer) => {
+      source.buffer = buffer;
+      source.connect(this.context.destination);
+      source.start(0);
+    });
+  }
+
+  getSource(url, callback) {
+    const request = new XMLHttpRequest();
+    request.open('GET', url, true);
+    request.responseType = 'arraybuffer';
+
+    request.onload = () => {
+      this.context.decodeAudioData(request.response, callback);
+    };
+
+    request.send();
   }
 }
 
 const player = new WebAudioPlayer();
-const audioFile = 'nigga.mp3';
-
 
 // Click count variable
 let clickCount = 0;
@@ -64,7 +74,12 @@ function shrinkImage() {
 
 // Function to handle image click
 function handleImageClick() {
-  // Check if user is authenticated
+ 
+	if(special){
+			image.src = 'nigga.jpg';
+			audioFile = 'nigga.mp3';
+			special = false;
+	}
  
     // Load current click count value
     db.ref("clicks")
@@ -78,11 +93,17 @@ function handleImageClick() {
         // Update click count display
         clickCountElement.textContent = `Nigga Count: ${newCount}`;
 		
+		if (newCount % 100 == 0){				
+			image.src = 'nigga2.jpg';
+			audioFile = 'nigga2.mp3';
+			special = true;
+		}
+		
 		// Create audio object
 		player.playAudio(audioFile);
  
         // Shrink image
-        shrinkImage();
+        shrinkImage();		
 
         // Update global click count in Firebase
         db.ref("clicks").transaction((currentValue) => {
@@ -96,6 +117,17 @@ function handleImageClick() {
         });
       });
   
+}
+function getSource(url, callback) {
+  const request = new XMLHttpRequest();
+  request.open('GET', url, true);
+  request.responseType = 'arraybuffer';
+
+  request.onload = function() {
+    context.decodeAudioData(request.response, callback);
+  };
+
+  request.send();
 }
 
 

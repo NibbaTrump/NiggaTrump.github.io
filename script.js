@@ -94,7 +94,9 @@ function handleImageClick() {
         clickCountElement.textContent = `Nigga Count: ${newCount}`;
 		
 		if (newCount % 100 == 0){				
-			image.src = 'nigga2.jpg';
+			//image.src = 'nigga2.jpg';
+			var randomNumber = Math.floor(Math.random() * 10) + 1;
+			image.src = randomNumber.toString() + '.jpg';
 			audioFile = 'nigga2.mp3';
 			special = true;
 		}

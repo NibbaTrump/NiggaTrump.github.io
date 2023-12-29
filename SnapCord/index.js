@@ -8,7 +8,7 @@ const { Client, IntentsBitField } = require('discord.js');
 const config = require('./config.json');
 
 const toUnicodeVariant = require('./toUnicodeVariant.js'); 
-
+const channelID = config.channelid;
 const webhookUrl = config.webhook;
 
 const client = new Client({
@@ -92,7 +92,8 @@ client.on('ready', (c) => {
 	});
 		
 	client.on('messageCreate', (message) => {
-		if(message.channel.id != config.channelID){
+		console.log(channelID);
+		if(message.channel.id !=channelID){
 			return;
 		}
 		if (message.webhookId) {

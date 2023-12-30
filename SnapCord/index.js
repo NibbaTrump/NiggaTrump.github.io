@@ -1,7 +1,9 @@
 const Snapchat = require("./snapchat.js");
 const axios = require('axios');
+const { DateTime } = require("luxon");
 let history = []; // Initialize chat history
 var sentdiscordmsg = "";
+var sentdiscordauthor = "";
 var isDiscordmsg = false;
 
 const { Client, IntentsBitField } = require('discord.js');
@@ -33,7 +35,7 @@ client.on('ready', (c) => {
 	snapclient.events.on("message", async (message) => {
 		
 		console.log(message);
-		if (message.content.includes("@zzzzznick-ai") || message.content.includes("@zzzzzzNickAI")) {
+		/*if (message.content.includes("@zzzzznick-ai") || message.content.includes("@zzzzzzNickAI")) {
             // Send the combined message to the OpenAI API
 			let tempmessage;
 			if (message.content.startsWith("@nick-ai")) {
@@ -57,12 +59,34 @@ client.on('ready', (c) => {
             history.push({"role": "assistant", "content": responseText});
 			}						
 			}
-			
-		}else{
-			
+		}else {
+		}
+		*/
+		if(isDiscordmsg){
+			message.content = sentdiscordmsg;
+			message.author = sentdiscordauthor;
 		}
 		
-		//if(message.content == sentdiscordmsg)){
+		if(message.content.startsWith("!say ")){
+		snapclient.SendMessage(message.content.slice(5));
+		}else if(message.content.startsWith("!time")){
+		const currentTimeInEST = getCurrentTimeInEST();
+		const hours = DateTime.fromFormat(currentTimeInEST, "h:mm a").hour;
+		if (hours >= 0 && hours < 2) {
+			snapclient.SendMessage(`It's ${currentTimeInEST}\nGo to bed ${message.author}.`)
+		} else if (hours >= 2 && hours < 5) {
+			snapclient.SendMessage(`IT'S ${currentTimeInEST}\nGO TO FUCKING SLEEP ${(message.author).toUpperCase()}!!`);
+		} else if (hours >= 5 && hours < 8) {
+			snapclient.SendMessage(`It's ${currentTImeInEST}\nGood morning ${message.author}! \n Your up early nigger.`);
+		} else if (hours >= 8 && hours < 12) {
+			snapclient.SendMessage(`It's ${currentTImeInEST}\nGood morning ${message.author}!`);
+		} else if (hours >= 12 && hours < 18) {
+			snapclient.SendMessage(`It's ${currentTImeInEST}\nGood evening ${message.author}!`);
+		} else if (hours >= 18 && hours < 23) {
+			snapclient.SendMessage(`It's ${currentTImeInEST}\nGood night ${message.author}!`);
+		}
+		}
+		
 	    if(isDiscordmsg){
 			isDiscordmsg = false;
 			return;
@@ -80,6 +104,10 @@ client.on('ready', (c) => {
 		if (avatarUrl !== null) {
 			messageData.avatar_url = avatarUrl;
 		} 
+		}
+		
+		if(message.author == "Me"){
+			message.author = "NickAI";
 		}
 
 		axios.post(webhookUrl, messageData)
@@ -104,28 +132,44 @@ client.on('ready', (c) => {
 		// Check if the sender is a bot
 			//snapclient.SendMessage(sentdiscordmsg = `${toUnicodeVariant(message.member.nickname, 'b')}(BOT): ${message.cleanContent}`);
 			if(message.author.username == "NickAI"){
-				snapclient.SendMessage(sentdiscordmsg = `${message.cleanContent}`);
+				snapclient.SendMessage(`${message.cleanContent}`);
 			}else if(message.author.username == "BabaAI"){
-				snapclient.SendMessage(sentdiscordmsg = `𝐄𝐦𝐢𝐥𝐢𝐚𝐀𝐈: ${message.cleanContent}\n`);
+				snapclient.SendMessage(`𝐄𝐦𝐢𝐥𝐢𝐚𝐀𝐈: ${message.cleanContent}\n`);
 			}else{
-				snapclient.SendMessage(sentdiscordmsg = `${toUnicodeVariant(message.member.nickname || message.author.displayName, 'm')}(BOT): ${message.cleanContent}`);
+				snapclient.SendMessage(`${toUnicodeVariant(message.member.nickname || message.author.displayName, 'm')}(BOT): ${message.cleanContent}`);
 			}
-			isDiscordmsg = true;
 		}else{
 			if(message.attachments.size > 0){
 				const attachmentUrl = message.attachments.first().url;
-				snapclient.SendMessage(sentdiscordmsg = ` ‏‏‎ \n${toUnicodeVariant(message.member.nickname || message.author.displayName, 'm')}: ${attachmentUrl}\n ‏‏‎ `);
+				snapclient.SendMessage(` ‏‏‎ \n${toUnicodeVariant(message.member.nickname || message.author.displayName, 'm')}: ${attachmentUrl}\n ‏‏‎ `);
 			}else{
-				snapclient.SendMessage(sentdiscordmsg = ` ‏‏‎ \n${toUnicodeVariant(message.member.nickname || message.author.displayName, 'm')}: ${message.cleanContent}\n ‏‏‎ `);
-			}
-			isDiscordmsg = true;
+				snapclient.SendMessage(` ‏‏‎ \n${toUnicodeVariant(message.member.nickname || message.author.displayName, 'm')}: ${message.cleanContent}\n ‏‏‎ `);
+			}		
 			//snapclient.SendMessage(sentdiscordmsg = `${toUnicodeVariant(message.member.nickname, 'b')}: ${message.cleanContent}`);
 		}
+		sentdiscordmsg = message.cleanContent;
+		sentdiscordauthor = message.member.nickname || message.author.displayName;
+		isDiscordmsg = true;
+		
+		
 		//sentdiscordmsg = message.content;
 	});
 })();
 
 client.login(config.token);
+
+function getCurrentTimeInEST() {
+  // Get current time in UTC
+  const currentTimeUTC = DateTime.utc();
+
+  // Convert to Eastern Time (EST)
+  const currentTimeEST = currentTimeUTC.setZone("America/New_York");
+
+  // Format as "hhmm"
+  const formattedTime = currentTimeEST.toFormat("h:mm a");
+
+  return formattedTime;
+}
 
 async function getAIResponse(prompt) {
     const url = 'http://127.0.0.1:5000/v1/chat/completions';

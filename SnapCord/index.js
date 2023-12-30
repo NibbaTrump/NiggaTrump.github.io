@@ -107,7 +107,7 @@ client.on('ready', (c) => {
 		}
 		
 		if(message.author == "Me"){
-			message.author = "NickAI";
+			messageData.username = "NickAI";
 		}
 
 		axios.post(webhookUrl, messageData)

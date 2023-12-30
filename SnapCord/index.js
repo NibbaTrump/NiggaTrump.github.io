@@ -77,13 +77,13 @@ client.on('ready', (c) => {
 		} else if (hours >= 2 && hours < 5) {
 			snapclient.SendMessage(`IT'S ${currentTimeInEST}\nGO TO FUCKING SLEEP ${(message.author).toUpperCase()}!!`);
 		} else if (hours >= 5 && hours < 8) {
-			snapclient.SendMessage(`It's ${currentTImeInEST}\nGood morning ${message.author}! \n Your up early nigger.`);
+			snapclient.SendMessage(`It's ${currentTimeInEST}\nGood morning ${message.author}! \n Your up early nigger.`);
 		} else if (hours >= 8 && hours < 12) {
-			snapclient.SendMessage(`It's ${currentTImeInEST}\nGood morning ${message.author}!`);
+			snapclient.SendMessage(`It's ${currentTimeInEST}\nGood morning ${message.author}!`);
 		} else if (hours >= 12 && hours < 18) {
-			snapclient.SendMessage(`It's ${currentTImeInEST}\nGood evening ${message.author}!`);
+			snapclient.SendMessage(`It's ${currentTimeInEST}\nGood evening ${message.author}!`);
 		} else if (hours >= 18 && hours < 23) {
-			snapclient.SendMessage(`It's ${currentTImeInEST}\nGood night ${message.author}!`);
+			snapclient.SendMessage(`It's ${currentTimeInEST}\nGood night ${message.author}!`);
 		}
 		}
 		
